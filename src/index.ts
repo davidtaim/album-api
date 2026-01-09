@@ -4,6 +4,13 @@ import { Elysia, t } from 'elysia';
 import { staticPlugin } from '@elysiajs/static';
 import { cors } from '@elysiajs/cors'
 
+interface Photo {
+  id: number;
+  name: string;
+  message: string;
+  url_image: string;
+}
+
 const db = new Database("photo-api.sqlite");
 
 const createTables = async () => {
@@ -48,7 +55,21 @@ createTables().then(() => {
       })
     })
     .get('/album', async () => {
-      return db.query("SELECT id, name, message, url_image FROM album").all();
+      return db.query('SELECT id, name, message, url_image FROM album').all();
+    })
+    .delete('/photo/:id', async ({ params: { id }, set}) => {
+      const row = db.query('SELECT id, name, message, url_image FROM album WHERE id = $id');
+      const fileData = row.get({
+        $id: id
+      }) as Photo;
+
+      const path = fileData.url_image.split('3000/')[1];
+
+      db.run('DELETE FROM album WHERE id = ?', [id]);
+
+      await Bun.file(path).delete();
+
+      set.status = 204;
     })
     .listen(Bun.env.PORT || 3000);
 
