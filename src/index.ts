@@ -11,6 +11,8 @@ interface Photo {
   url_image: string;
 }
 
+const DOMAIN = 'localhost';
+
 const db = new Database("photo-api.sqlite");
 
 const createTables = async () => {
@@ -36,7 +38,7 @@ createTables().then(() => {
 
         Bun.write(photoPath, photo);
 
-        const url = `http:localhost:3000/${photoPath}`;
+        const url = `http:${DOMAIN}:3000/${photoPath}`;
         db.query(`INSERT INTO album (name, message, url_image) 
                   VALUES (?, ?, ?)`)
           .run(name, message, url);
