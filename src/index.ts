@@ -41,7 +41,7 @@ createTables().then(() => {
         const url = `http://${DOMAIN}:3000/${photoPath}`;
         db.query(`INSERT INTO album (name, message, url_image) 
                   VALUES (?, ?, ?)`)
-          .run(name, message, url);
+          .run(name ?? '', message ?? '', url);
         return status(201, { url });
       } catch (e) {
         return status(500, {
@@ -51,8 +51,8 @@ createTables().then(() => {
       }
     }, {
       body: t.Object({
-        name: t.String(),
-        message: t.String(),
+        name: t.Optional(t.String({ default: '' })),
+        message: t.Optional(t.String({ default: '' })),
         photo: t.File({ format: "image/*" })
       })
     })
