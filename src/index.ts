@@ -38,7 +38,7 @@ createTables().then(() => {
 
         Bun.write(photoPath, photo);
 
-        const url = `http:${DOMAIN}:3000/${photoPath}`;
+        const url = `http://${DOMAIN}:3000/${photoPath}`;
         db.query(`INSERT INTO album (name, message, url_image) 
                   VALUES (?, ?, ?)`)
           .run(name, message, url);
