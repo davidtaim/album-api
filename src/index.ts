@@ -59,7 +59,7 @@ createTables().then(() => {
     .get('/album', async () => {
       return db.query('SELECT id, name, message, url_image FROM album').all();
     })
-    .delete('/photo/:id', async ({ params: { id }, set}) => {
+    .delete('/photo/:id', async ({ params: { id }, set }) => {
       const row = db.query('SELECT id, name, message, url_image FROM album WHERE id = $id');
       const fileData = row.get({
         $id: id
