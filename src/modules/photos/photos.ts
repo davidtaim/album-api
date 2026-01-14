@@ -1,5 +1,5 @@
-import { Elysia, t, status } from 'elysia';
-import { randomUUIDv7 } from 'bun';
+import { randomUUIDv7, $ } from 'bun';
+import { Elysia, t, status, file } from 'elysia';
 import { db } from '../../db/client';
 import { env } from '../../config/env';
 import { Photo } from '../../types/types';
@@ -34,14 +34,12 @@ export const photosModule = new Elysia()
         body: uploadPhotoBody
     }).get('/album', async () => {
         return db.query('SELECT id, name, message, url_image FROM album').all();
-    })
-    .get('/query-album', async ({ query }) => {
+    }).get('/query-album', async ({ query }) => {
         const { limit, order } = query;
 
         return db.query(`SELECT id, name, message, url_image FROM album ORDER BY id ${order} LIMIT ${limit}`).all();
 
-    })
-    .get('/pagination-album', async ({ query }) => {
+    }).get('/pagination-album', async ({ query }) => {
 
         const { current_page, limit, order } = query;
 
@@ -62,8 +60,7 @@ export const photosModule = new Elysia()
             total_pages: totalPages,
             data
         };
-    })
-    .delete('/photo/:id', async ({ params: { id }, set }) => {
+    }).delete('/photo/:id', async ({ params: { id }, set }) => {
         const row = db.query('SELECT id, name, message, url_image FROM album WHERE id = $id');
         const fileData = row.get({
             $id: id
@@ -76,4 +73,10 @@ export const photosModule = new Elysia()
         await Bun.file(path).delete();
 
         set.status = 204;
+    }).get('/make-zip', async () => {
+        const tool = '7z';
+        const exit_code = (await $`${tool} a -r public/files/photos.7z ./public/photos/*`).exitCode;
+        return { exit_code };
+    }).get('/download-zip', async () => {
+        return file('public/files/photos.7z');
     });
