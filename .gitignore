@@ -42,7 +42,7 @@ yarn-error.log*
 package-lock.json
 **/*.bun
 
-public/photos/*.png
+public/photos/*.*
 
 photo-api.sqlite
 photo-api.sqlite-shm
