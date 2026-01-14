@@ -50,7 +50,7 @@ export const photosModule = new Elysia()
         const sql = `SELECT id, name, message, url_image FROM album ORDER BY id ${order} LIMIT ${offset}, ${limit}`;
         const data = db.query(sql).all();
 
-        const url = `'${env.DOMAIN}:3000/pagination-album?limit=${limit}&order=${order}&current_page=`;
+        const url = `${env.DOMAIN}:3000/pagination-album?limit=${limit}&order=${order}&current_page=`;
 
         const { count } = db.query('SELECT COUNT(*) as count FROM album').get() as { count: number };
 
