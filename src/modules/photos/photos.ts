@@ -62,11 +62,18 @@ export const photosModule = new Elysia()
         };
     }).delete('/photo/:id', async ({ params: { id }, set }) => {
         const row = db.query('SELECT id, name, message, url_image FROM album WHERE id = $id');
+
         const fileData = row.get({
             $id: id
         }) as Photo;
 
-        const path = fileData.url_image.split('3000/')[1];
+        if (!fileData) {
+            set.status = 404;
+            return;
+        }
+
+        const urlArray = fileData.url_image.split('/');
+        const path = 'public/photos/' + urlArray[urlArray.length - 1];
 
         db.run('DELETE FROM album WHERE id = ?', [id]);
 
@@ -76,6 +83,8 @@ export const photosModule = new Elysia()
     }).get('/make-zip', async () => {
         const exit_code = (await $`zip -r -j -q public/files/photos.zip ./public/photos`).exitCode;
         return { exit_code };
+    }).get('exists-zip', async () => {
+        return { exists: await Bun.file('public/files/photos.zip').exists() };
     }).get('/download-zip', async () => {
         return file('public/files/photos.zip');
     });
