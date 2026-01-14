@@ -74,9 +74,8 @@ export const photosModule = new Elysia()
 
         set.status = 204;
     }).get('/make-zip', async () => {
-        const tool = '7z';
-        const exit_code = (await $`${tool} a -r public/files/photos.7z ./public/photos/*`).exitCode;
+        const exit_code = (await $`zip -r -j -q public/files/photos.zip ./public/photos`).exitCode;
         return { exit_code };
     }).get('/download-zip', async () => {
-        return file('public/files/photos.7z');
+        return file('public/files/photos.zip');
     });
