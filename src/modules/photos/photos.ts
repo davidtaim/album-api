@@ -19,7 +19,7 @@ export const photosModule = new Elysia()
 
             Bun.write(photoPath, photo);
 
-            const url = `${env.DOMAIN}:3000/${photoPath}`;
+            const url = `${env.DOMAIN}/${photoPath}`;
             db.query(`INSERT INTO album (name, message, url_image) 
                       VALUES (?, ?, ?)`)
                 .run(name ?? '', message ?? '', url);
