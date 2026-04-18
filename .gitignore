@@ -47,3 +47,7 @@ public/photos/*.*
 photo-api.sqlite
 photo-api.sqlite-shm
 photo-api.sqlite-wal
+photo.sqlite
+photo.sqlite-shm
+photo.sqlite-wal
+

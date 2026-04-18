@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
-    "@elysiajs/static": "^1.4.7",
+    "@elysiajs/static": "^1.4.9",
     "elysia": "latest"
   },
   "devDependencies": {
